@@ -38,3 +38,12 @@ footer,.credit{color:#737b84!important}.footer-dot{color:var(--red)!important}.c
   .icon{width:30px;height:30px;min-width:30px;max-width:30px;flex-basis:30px}
   .icon svg{width:22px!important;height:22px!important;max-width:22px;max-height:22px}
 }
+
+/* WhatsApp icons: white on red CTA and floating contact button */
+.link-card.primary .icon{color:#fff!important}
+.link-card.primary .icon svg{stroke:#fff!important}
+.floating-whatsapp{position:fixed;z-index:20;right:20px;bottom:20px;width:60px;height:60px;border-radius:50%;display:grid;place-items:center;background:#c92338;color:#fff;box-shadow:0 6px 20px rgba(160,20,40,.3);border:2px solid rgba(255,255,255,.9);transition:transform .2s,box-shadow .2s}
+.floating-whatsapp:hover{transform:translateY(-3px);box-shadow:0 9px 25px rgba(160,20,40,.38)}
+.floating-whatsapp svg{width:34px;height:34px;display:block}
+.floating-whatsapp:focus-visible{outline:3px solid var(--blue);outline-offset:4px}
+@media(max-width:480px){.floating-whatsapp{width:54px;height:54px;right:15px;bottom:15px}.floating-whatsapp svg{width:31px;height:31px}}
