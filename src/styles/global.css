@@ -47,3 +47,13 @@ footer,.credit{color:#737b84!important}.footer-dot{color:var(--red)!important}.c
 .floating-whatsapp svg{width:34px;height:34px;display:block}
 .floating-whatsapp:focus-visible{outline:3px solid var(--blue);outline-offset:4px}
 @media(max-width:480px){.floating-whatsapp{width:54px;height:54px;right:15px;bottom:15px}.floating-whatsapp svg{width:31px;height:31px}}
+
+/* Floating WhatsApp uses the official green brand color */
+.floating-whatsapp{background:#25D366!important;color:#fff!important;box-shadow:0 6px 20px rgba(37,211,102,.32)!important}
+.floating-whatsapp:hover{box-shadow:0 9px 25px rgba(37,211,102,.42)!important}
+/* Alternating subtle zoom motion in the photo stories */
+.story-slide.zoom-in.is-active{animation:storyZoomIn 4.8s linear forwards}
+.story-slide.zoom-out.is-active{animation:storyZoomOut 4.8s linear forwards}
+@keyframes storyZoomIn{from{transform:scale(1)}to{transform:scale(1.11)}}
+@keyframes storyZoomOut{from{transform:scale(1.11)}to{transform:scale(1)}}
+@media(prefers-reduced-motion:reduce){.story-slide.zoom-in.is-active,.story-slide.zoom-out.is-active{animation:none;transform:none}}
