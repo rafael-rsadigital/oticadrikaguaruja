@@ -22,3 +22,19 @@ footer,.credit{color:#737b84!important}.footer-dot{color:var(--red)!important}.c
 .nap{flex-wrap:wrap;line-height:1.8;padding:0 8px;text-align:center}
 .story-carousel{cursor:pointer;touch-action:manipulation}.story-toggle{background:rgba(30,35,40,.5)}
 @media(prefers-reduced-motion:reduce){.page::before{animation:none}}
+
+/* Mobile layout refinements: compact footer and consistently sized brand icons */
+@media(max-width:480px){
+  footer.nap{display:flex;flex-direction:column;gap:3px;margin-top:22px;font-size:11px;line-height:1.5;max-width:100%;padding:0 10px}
+  footer.nap .footer-dot{display:none}
+  footer.nap span{max-width:100%;overflow-wrap:anywhere}
+  .credit{font-size:10px;margin-top:9px}
+  .icon{width:34px;height:34px;min-width:34px;max-width:34px;flex:0 0 34px}
+  .icon svg{width:24px!important;height:24px!important;max-width:24px;max-height:24px;display:block}
+  .link-card{min-width:0}
+}
+@media(max-width:360px){
+  footer.nap{font-size:10px}
+  .icon{width:30px;height:30px;min-width:30px;max-width:30px;flex-basis:30px}
+  .icon svg{width:22px!important;height:22px!important;max-width:22px;max-height:22px}
+}
