@@ -57,3 +57,8 @@ footer,.credit{color:#737b84!important}.footer-dot{color:var(--red)!important}.c
 @keyframes storyZoomIn{from{transform:scale(1)}to{transform:scale(1.11)}}
 @keyframes storyZoomOut{from{transform:scale(1.11)}to{transform:scale(1)}}
 @media(prefers-reduced-motion:reduce){.story-slide.zoom-in.is-active,.story-slide.zoom-out.is-active{animation:none;transform:none}}
+
+/* WhatsApp mark: clean, thinner official-style glyph */
+.whatsapp-svg{fill:none!important;stroke:currentColor!important;stroke-width:1.65!important;stroke-linecap:round!important;stroke-linejoin:round!important}
+.whatsapp-svg path:last-child{fill:currentColor!important;stroke:none!important}
+.floating-whatsapp .whatsapp-svg{stroke-width:1.5!important}
