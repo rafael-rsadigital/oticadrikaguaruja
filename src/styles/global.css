@@ -2,26 +2,23 @@
 /* Instagram-story inspired photo carousel */
 .stories{margin:24px 0 27px}.stories-heading{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:0 2px 12px}.stories-heading span{font-size:14px;font-weight:700;color:#343a43}.stories-heading small{font-size:11px;color:#89919a}.story-carousel{position:relative;width:min(100%,340px);aspect-ratio:9/16;margin:0 auto;border-radius:20px;overflow:hidden;background:#e9e9eb;box-shadow:0 9px 26px rgba(32,38,48,.12)}.story-slides{position:absolute;inset:0}.story-slide{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;opacity:0;transform:scale(1.015);transition:opacity .45s ease,transform 4.8s linear}.story-slide.is-active{opacity:1;transform:scale(1)}.story-progress{position:absolute;z-index:2;top:12px;left:10px;right:10px;display:flex;gap:4px}.story-progress-segment{height:3px;flex:1;border-radius:9px;background:rgba(255,255,255,.42);overflow:hidden}.story-progress-segment i{display:block;width:0;height:100%;background:#fff;border-radius:9px}.story-toggle{position:absolute;z-index:3;right:10px;bottom:10px;width:34px;height:34px;border:1px solid rgba(255,255,255,.55);border-radius:50%;background:rgba(30,35,40,.38);color:white;font-size:13px;display:grid;place-items:center;cursor:pointer;backdrop-filter:blur(6px)}.story-toggle:focus-visible{outline:2px solid #fff;outline-offset:2px}@media(max-width:480px){.stories{margin:22px 0 25px}.stories-heading{margin-bottom:10px}.story-carousel{width:min(100%,330px);border-radius:18px}.story-progress{top:10px;left:9px;right:9px}.story-toggle{width:32px;height:32px;right:9px;bottom:9px}}@media(prefers-reduced-motion:reduce){.story-slide{transition:opacity .15s ease,transform .15s ease}}
 
-/* Photo background + translucent glass UI */
-.page{background:transparent!important;color:#fff}
-.page::before{content:"";position:fixed;inset:-18px;z-index:-2;background-image:url('/images/background%20%C3%B3tica.jpg');background-position:center;background-size:cover;background-repeat:no-repeat;filter:blur(5px);transform:scale(1.035)}
-.page::after{content:"";position:fixed;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(10,13,18,.56),rgba(10,13,18,.43) 45%,rgba(10,13,18,.64));pointer-events:none}
-.ambient{display:none}
-.profile{color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.25)}
-.eye{filter:drop-shadow(0 4px 10px rgba(0,0,0,.3))}
-.brand{color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.35)}.brand span{color:#fff}
-.tagline,.experience{color:rgba(255,255,255,.92)}
-.credentials{color:#fff}.credentials i{background:#fff}
-.link-card,.quick-card,.address{background:rgba(255,255,255,.13)!important;border:1px solid rgba(255,255,255,.32)!important;backdrop-filter:blur(13px);-webkit-backdrop-filter:blur(13px);box-shadow:0 8px 24px rgba(0,0,0,.12);color:#fff!important}
-.link-card.primary{background:rgba(255,255,255,.2)!important;border-color:rgba(255,255,255,.42)!important}
-.link-card:hover,.quick-card:hover{background:rgba(255,255,255,.22)!important;border-color:rgba(255,255,255,.5)!important}
-.icon{color:#fff!important}.icon svg{stroke:#fff!important;fill:none!important;stroke-width:1.7}
-.divider{background:rgba(255,255,255,.38)!important}
-.link-copy strong,.link-copy small{color:#fff!important}.arrow{color:rgba(255,255,255,.9)!important}
-.section-heading h2,.stories-heading span,.stories-heading small{color:#fff!important}.section-heading>span{background:rgba(255,255,255,.4)}
-.quick-card b{color:#fff!important}
-.map{border-color:rgba(255,255,255,.35);box-shadow:0 8px 22px rgba(0,0,0,.15)}
-.address strong,.address small{color:#fff!important}.location-icon{color:#fff!important}
-.hours,.closed{color:rgba(255,255,255,.88)!important}.clock{color:#fff!important}
-footer,.credit{color:rgba(255,255,255,.8)!important}.footer-dot{color:#fff!important}.credit a{color:#fff!important}
-@media(prefers-reduced-motion:reduce){.page::before{filter:blur(2px)}}
+
+/* White background and animated red light */
+.page{background:#fff!important;color:var(--ink)}
+.page::before{content:"";position:fixed;z-index:-1;inset:0;pointer-events:none;background:linear-gradient(115deg,transparent 0%,rgba(210,35,58,.04) 25%,rgba(210,35,58,.16) 48%,rgba(210,35,58,.04) 65%,transparent 78%);background-size:220% 100%;animation:redSweep 8s ease-in-out infinite}
+.page::after{display:none}.ambient{display:none}
+@keyframes redSweep{0%,100%{background-position:120% 0;opacity:.35}50%{background-position:-120% 0;opacity:1}}
+.profile{color:var(--ink);text-shadow:none}.eye{filter:none}.brand{color:var(--red);text-shadow:none}.brand span{color:var(--ink)}
+.tagline,.experience{color:var(--muted)}.credentials{color:var(--red)}.credentials i{background:var(--blue)}
+.link-card,.quick-card,.address{background:rgba(255,255,255,.88)!important;border:1px solid #e7e8eb!important;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);box-shadow:0 6px 22px rgba(32,38,48,.06);color:var(--ink)!important}
+.link-card.primary{background:linear-gradient(110deg,#d02b40,#b81e31)!important;border-color:transparent!important;color:#fff!important}
+.link-card:hover,.quick-card:hover{background:#fff!important;border-color:rgba(201,35,56,.3)!important}.link-card.primary:hover{background:linear-gradient(110deg,#d02b40,#b81e31)!important}
+.icon{color:var(--red)!important}.icon svg{stroke:currentColor!important;fill:none!important;stroke-width:1.8}
+.divider{background:#e4e5e8!important}.primary .divider{background:rgba(255,255,255,.48)!important}
+.link-copy strong{color:var(--ink)!important}.link-copy small{color:var(--muted)!important}.primary .link-copy strong,.primary .link-copy small{color:#fff!important}.arrow{color:#9ca2aa!important}.primary .arrow{color:#fff!important}
+.section-heading h2,.stories-heading span{color:#68717c!important}.stories-heading small{color:#89919a!important}.section-heading>span{background:#d9dce1!important}.quick-card b{color:var(--red)!important}
+.map{border-color:#e4e6e9;box-shadow:0 5px 18px rgba(32,38,48,.05)}.hours,.closed{color:#636b75!important}.clock{color:var(--red)!important}
+footer,.credit{color:#737b84!important}.footer-dot{color:var(--red)!important}.credit a{color:var(--red)!important}
+.nap{flex-wrap:wrap;line-height:1.8;padding:0 8px;text-align:center}
+.story-carousel{cursor:pointer;touch-action:manipulation}.story-toggle{background:rgba(30,35,40,.5)}
+@media(prefers-reduced-motion:reduce){.page::before{animation:none}}
