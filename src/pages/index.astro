@@ -70,7 +70,7 @@ const quick = [
           <video class="story-slide story-video zoom-in" data-src="/videos/WhatsApp%20Video%202026-11-27%20at%2015.09.55.mp4" muted playsinline preload="none" aria-label="Vídeo 3 da Ótica Drika"></video>
           <video class="story-slide story-video zoom-out" data-src="/videos/WhatsApp%20Video%202026-11-27%20at%2015.10.04.mp4" muted playsinline preload="none" aria-label="Vídeo 4 da Ótica Drika"></video>
         </div>
-        <button class="story-toggle" type="button" aria-label="Pausar carrossel" title="Pausar">Ⅱ</button>
+        <button class="story-sound" type="button" aria-label="Ativar áudio" title="Áudio">♫</button><button class="story-toggle" type="button" aria-label="Pausar carrossel" title="Pausar">Ⅱ</button>
       </div>
     </section>
     <section class="quick-section">
@@ -102,11 +102,23 @@ if (carousel) {
   const slides=[...carousel.querySelectorAll('.story-slide')];
   const bars=[...carousel.querySelectorAll('.story-progress-segment i')];
   const pauseButton=carousel.querySelector('.story-toggle');
+  const soundButton=carousel.querySelector('.story-sound');
   const imageDuration=4800;
   let current=0,paused=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let timer,start=0,remaining=imageDuration;
+  let soundOn=true,timer,start=0,remaining=imageDuration;
   const isVideo=(s)=>s instanceof HTMLVideoElement;
   const stopVideos=()=>slides.filter(isVideo).forEach(v=>{v.pause();v.currentTime=0;});
+  const playActiveVideo=(v)=>{
+    v.muted=!soundOn;
+    const attempt=v.play();
+    if(attempt&&typeof attempt.catch==='function'){
+      attempt.catch(()=>{
+        // If the browser blocks autoplay with sound, continue muted and let the sound control enable it.
+        v.muted=true;v.play().catch(()=>{});
+        soundButton.textContent='♩';soundButton.setAttribute('aria-label','Ativar áudio');soundButton.title='Ativar áudio';
+      });
+    }
+  };
   const setSlide=(index)=>{
     clearTimeout(timer);stopVideos();
     slides.forEach((s,i)=>{s.classList.toggle('is-active',i===index);s.classList.remove('zoom-in','zoom-out');s.classList.add(i%2===0?'zoom-in':'zoom-out');});
@@ -126,7 +138,7 @@ if (carousel) {
     requestAnimationFrame(()=>{bar.style.transition='width '+duration+'ms linear';bar.style.width='100%';});
     start=Date.now();
     if(isVideo(active)){
-      active.play().catch(()=>{});
+      playActiveVideo(active);
       timer=setTimeout(next,duration);
     }else timer=setTimeout(next,duration);
   };
@@ -152,8 +164,19 @@ if (carousel) {
     if(isVideo(slides[current])&&Number.isFinite(slides[current].duration))remaining=Math.max(250,(slides[current].duration-slides[current].currentTime)*1000);
     startProgress();
   };
+  soundButton.addEventListener('click',e=>{
+    e.stopPropagation();soundOn=!soundOn;
+    const active=slides[current];
+    if(isVideo(active)){
+      active.muted=!soundOn;
+      if(soundOn&&!paused)playActiveVideo(active);
+    }
+    soundButton.textContent=soundOn?'♫':'♩';
+    soundButton.setAttribute('aria-label',soundOn?'Desativar áudio':'Ativar áudio');
+    soundButton.title=soundOn?'Áudio ligado':'Áudio desligado';
+  });
   pauseButton.addEventListener('click',e=>{e.stopPropagation();paused?play():pause();});
-  carousel.addEventListener('click',e=>{if(e.target===pauseButton)return;const b=carousel.getBoundingClientRect();e.clientX-b.left<b.width/2?prev():next();});
+  carousel.addEventListener('click',e=>{if(e.target===pauseButton||e.target===soundButton)return;const b=carousel.getBoundingClientRect();e.clientX-b.left<b.width/2?prev():next();});
   carousel.addEventListener('mouseenter',pause);carousel.addEventListener('mouseleave',play);
   if(!paused)startProgress();else pauseButton.textContent='▶';
 }
