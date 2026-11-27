@@ -48,18 +48,24 @@ const quick = [
         <span class="divider"></span><span class="link-copy"><strong>{link.label}</strong><small>{link.sub}</small></span><span class="arrow">›</span>
       </a>)}
     </nav>
-    <section class="stories" aria-label="Fotos da Ótica Drika">
-      <div class="stories-heading"><span>Conheça a Ótica Drika</span><small>Fotos da loja e produtos</small></div>
+    <section class="stories" aria-label="Fotos e vídeos da Ótica Drika">
+      <div class="stories-heading"><span>Conheça a Ótica Drika</span><small>Fotos, novidades e produtos</small></div>
       <div class="story-carousel" data-story-carousel>
         <div class="story-progress" aria-hidden="true">
-          {Array.from({length:5},(_,i)=><span class="story-progress-segment"><i></i></span>)}
+          {Array.from({length:11},(_,i)=><span class="story-progress-segment"><i></i></span>)}
         </div>
         <div class="story-slides">
-          <img class="story-slide is-active zoom-in" src="/images/exame-de-vista-guaruja%5B.jpg" alt="Exame de vista e cuidado com a saúde visual na Ótica Drika" loading="lazy" />
-          <img class="story-slide zoom-out" src="/images/modelo-otica-drika.jpg" alt="Modelo usando óculos da Ótica Drika" loading="lazy" />
-          <img class="story-slide zoom-in" src="/images/oculos-de-grau.jpg" alt="Óculos de grau disponíveis na Ótica Drika" loading="lazy" />
-          <img class="story-slide zoom-out" src="/images/otica-drika-guaruja-1.jpg" alt="Ótica Drika em Guarujá" loading="lazy" />
-          <img class="story-slide zoom-in" src="/images/otica-drika-guaruja-2.jpg" alt="Conheça a Ótica Drika" loading="lazy" />
+          <img class="story-slide is-active zoom-in" src="/images/WhatsApp%20Image%202026-11-27%20at%2015.09.50%20(1).jpeg" alt="Ótica Drika — conteúdo enviado pela loja" fetchpriority="high" />
+          <img class="story-slide zoom-out" src="/images/WhatsApp%20Image%202026-11-27%20at%2015.09.50%20(2).jpeg" alt="Ótica Drika — conteúdo enviado pela loja" loading="lazy" />
+          <img class="story-slide zoom-in" src="/images/WhatsApp%20Image%202026-11-27%20at%2015.09.50.jpeg" alt="Ótica Drika — conteúdo enviado pela loja" loading="lazy" />
+          <img class="story-slide zoom-out" src="/images/WhatsApp%20Image%202026-11-27%20at%2015.09.51.jpeg" alt="Ótica Drika — conteúdo enviado pela loja" loading="lazy" />
+          <img class="story-slide zoom-in" src="/images/WhatsApp%20Image%202026-11-27%20at%2015.10.03.jpeg" alt="Ótica Drika — conteúdo enviado pela loja" loading="lazy" />
+          <img class="story-slide zoom-out" src="/images/WhatsApp%20Image%202026-11-27%20at%2015.10.04.jpeg" alt="Ótica Drika — conteúdo enviado pela loja" loading="lazy" />
+          <img class="story-slide zoom-in" src="/images/WhatsApp%20Image%202026-11-27%20at%2015.10.05%20(1).jpeg" alt="Ótica Drika — conteúdo enviado pela loja" loading="lazy" />
+          <img class="story-slide zoom-out" src="/images/WhatsApp%20Image%202026-11-27%20at%2015.10.05%20(2).jpeg" alt="Ótica Drika — conteúdo enviado pela loja" loading="lazy" />
+          <img class="story-slide zoom-in" src="/images/WhatsApp%20Image%202026-11-27%20at%2015.10.05%20(3).jpeg" alt="Ótica Drika — conteúdo enviado pela loja" loading="lazy" />
+          <img class="story-slide zoom-out" src="/images/WhatsApp%20Image%202026-11-27%20at%2015.10.05.jpeg" alt="Ótica Drika — conteúdo enviado pela loja" loading="lazy" />
+          <video class="story-slide story-video zoom-in" data-src="/videos/WhatsApp%20Video%202026-11-27%20at%2015.10.04.mp4" muted playsinline preload="none" aria-label="Vídeo da Ótica Drika"></video>
         </div>
         <button class="story-toggle" type="button" aria-label="Pausar carrossel" title="Pausar">Ⅱ</button>
       </div>
@@ -93,52 +99,65 @@ if (carousel) {
   const slides = [...carousel.querySelectorAll('.story-slide')];
   const progress = [...carousel.querySelectorAll('.story-progress-segment i')];
   const pauseButton = carousel.querySelector('.story-toggle');
-  const duration = 4800;
-  const tapNext = () => { clearTimeout(timer); setSlide((current + 1) % slides.length); remaining = duration; if (!paused) runProgress(); };
-  const tapPrev = () => { clearTimeout(timer); setSlide((current - 1 + slides.length) % slides.length); remaining = duration; if (!paused) runProgress(); };
-  let current = 0;
-  let paused = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let start = 0;
-  let remaining = duration;
-  let timer;
+  const videoSlide = carousel.querySelector('.story-video');
+  const imageDuration = 4800;
+  let current = 0, paused = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let timer, start = 0, remaining = imageDuration, videoDuration = imageDuration;
+  const isVideo = (slide) => slide instanceof HTMLVideoElement;
+  const stopVideo = () => { if (videoSlide) { videoSlide.pause(); videoSlide.currentTime = 0; } };
   const setSlide = (index) => {
-    slides.forEach((slide, i) => { slide.classList.toggle('is-active', i === index); slide.classList.remove('zoom-in','zoom-out'); slide.classList.add(index % 2 === 0 ? 'zoom-in' : 'zoom-out'); });
-    progress.forEach((bar, i) => {
-      bar.style.transition = 'none';
-      bar.style.width = i < index ? '100%' : '0%';
+    stopVideo();
+    slides.forEach((slide,i) => {
+      slide.classList.toggle('is-active', i === index);
+      slide.classList.remove('zoom-in','zoom-out');
+      slide.classList.add(i % 2 === 0 ? 'zoom-in' : 'zoom-out');
     });
-    current = index;
+    progress.forEach((bar,i) => { bar.style.transition='none'; bar.style.width=i<index?'100%':'0%'; });
+    current=index;
+    remaining=isVideo(slides[current])?videoDuration:imageDuration;
+    if(isVideo(slides[current]) && videoSlide && !videoSlide.src) videoSlide.src=videoSlide.dataset.src;
+    if(isVideo(slides[current]) && videoSlide) videoSlide.load();
+    if(!paused) runProgress();
   };
   const runProgress = () => {
-    const bar = progress[current];
-    bar.style.transition = 'width ' + remaining + 'ms linear';
-    requestAnimationFrame(() => { bar.style.width = '100%'; });
-    start = Date.now();
-    timer = window.setTimeout(() => { setSlide((current + 1) % slides.length); remaining = duration; if (!paused) runProgress(); }, remaining);
-  };
-  const pause = () => {
-    if (paused) return;
-    paused = true;
     clearTimeout(timer);
-    remaining = Math.max(0, remaining - (Date.now() - start));
-    progress[current].style.transition = 'none';
-    progress[current].style.width = Math.min(100, (duration - remaining) / duration * 100) + '%'; slides[current].style.animationPlayState = 'paused';
-    pauseButton.textContent = '▶';
-    pauseButton.setAttribute('aria-label', 'Continuar carrossel');
-    pauseButton.title = 'Continuar'; slides[current].style.animationPlayState = 'paused';
+    const bar=progress[current];
+    const dur=remaining;
+    bar.style.transition='none';
+    requestAnimationFrame(()=>{bar.style.transition='width '+dur+'ms linear';bar.style.width='100%';});
+    start=Date.now();
+    if(isVideo(slides[current])) {
+      const v=slides[current];
+      v.play().catch(()=>{});
+      timer=window.setTimeout(()=>next(),dur);
+    } else {
+      timer=window.setTimeout(()=>next(),dur);
+    }
   };
-  const play = () => {
-    if (!paused) return;
-    paused = false;
-    pauseButton.textContent = 'Ⅱ';
-    pauseButton.setAttribute('aria-label', 'Pausar carrossel');
-    pauseButton.title = 'Pausar';
+  const next=()=>{setSlide((current+1)%slides.length);};
+  const previous=()=>{setSlide((current-1+slides.length)%slides.length);};
+  const pause=()=>{
+    if(paused)return;
+    paused=true;clearTimeout(timer);
+    remaining=Math.max(0,remaining-(Date.now()-start));
+    progress[current].style.transition='none';
+    progress[current].style.width=Math.min(100,(1-remaining/(isVideo(slides[current])?videoDuration:imageDuration))*100)+'%';
+    if(isVideo(slides[current])) slides[current].pause();
+    pauseButton.textContent='▶';pauseButton.setAttribute('aria-label','Continuar carrossel');pauseButton.title='Continuar';
+  };
+  const play=()=>{
+    if(!paused)return;
+    paused=false;pauseButton.textContent='Ⅱ';pauseButton.setAttribute('aria-label','Pausar carrossel');pauseButton.title='Pausar';
+    if(isVideo(slides[current]) && slides[current].duration && Number.isFinite(slides[current].duration)) remaining=Math.max(250,(slides[current].duration-slides[current].currentTime)*1000);
     runProgress();
   };
-  pauseButton.addEventListener('click', (e) => { e.stopPropagation(); paused ? play() : pause(); });
-  carousel.addEventListener('click', (e) => { if (e.target === pauseButton) return; const bounds = carousel.getBoundingClientRect(); (e.clientX - bounds.left < bounds.width / 2 ? tapPrev : tapNext)(); });
-  carousel.addEventListener('mouseenter', pause);
-  carousel.addEventListener('mouseleave', play);
-  if (!paused) runProgress(); else pauseButton.textContent = '▶';
+  if(videoSlide){
+    videoSlide.addEventListener('loadedmetadata',()=>{if(Number.isFinite(videoSlide.duration)){videoDuration=videoSlide.duration*1000;if(current===slides.indexOf(videoSlide)&&!paused){remaining=videoDuration;runProgress();}}});
+    videoSlide.addEventListener('ended',()=>{if(!paused)next();});
+  }
+  pauseButton.addEventListener('click',(e)=>{e.stopPropagation();paused?play():pause();});
+  carousel.addEventListener('click',(e)=>{if(e.target===pauseButton)return;clearTimeout(timer);remaining=isVideo(slides[current])?videoDuration:imageDuration;const b=carousel.getBoundingClientRect();setSlide(e.clientX-b.left<b.width/2?(current-1+slides.length)%slides.length:(current+1)%slides.length);});
+  carousel.addEventListener('mouseenter',pause);carousel.addEventListener('mouseleave',play);
+  if(!paused)runProgress();else pauseButton.textContent='▶';
 }
 </script>
