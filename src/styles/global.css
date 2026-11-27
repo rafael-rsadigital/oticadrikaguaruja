@@ -62,3 +62,8 @@ footer,.credit{color:#737b84!important}.footer-dot{color:var(--red)!important}.c
 .whatsapp-svg{fill:none!important;stroke:currentColor!important;stroke-width:1.65!important;stroke-linecap:round!important;stroke-linejoin:round!important}
 .whatsapp-svg path:last-child{fill:currentColor!important;stroke:none!important}
 .floating-whatsapp .whatsapp-svg{stroke-width:1.5!important}
+
+/* Story audio toggle beside pause/play */
+.story-sound{position:absolute;z-index:3;right:50px;bottom:10px;width:34px;height:34px;border:1px solid rgba(255,255,255,.55);border-radius:50%;background:rgba(30,35,40,.5);color:#fff;font-size:16px;display:grid;place-items:center;cursor:pointer;backdrop-filter:blur(6px)}
+.story-sound:focus-visible{outline:2px solid #fff;outline-offset:2px}
+@media(max-width:480px){.story-sound{width:32px;height:32px;right:47px;bottom:9px}}
