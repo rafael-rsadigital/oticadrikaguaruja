@@ -177,7 +177,8 @@ if (carousel) {
   });
   pauseButton.addEventListener('click',e=>{e.stopPropagation();paused?play():pause();});
   carousel.addEventListener('click',e=>{if(e.target===pauseButton||e.target===soundButton)return;const b=carousel.getBoundingClientRect();e.clientX-b.left<b.width/2?prev():next();});
-  carousel.addEventListener('mouseenter',pause);carousel.addEventListener('mouseleave',play);
+  // Não pausar por hover: avançar manualmente deve sempre iniciar o próximo story.
+  // Pausa fica exclusivamente no botão dedicado.
   if(!paused)startProgress();else pauseButton.textContent='▶';
 }
 </script>
