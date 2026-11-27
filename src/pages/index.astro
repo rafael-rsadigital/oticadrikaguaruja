@@ -52,7 +52,7 @@ const quick = [
       <div class="stories-heading"><span>Conheça a Ótica Drika</span><small>Fotos, novidades e produtos</small></div>
       <div class="story-carousel" data-story-carousel>
         <div class="story-progress" aria-hidden="true">
-          {Array.from({length:11},(_,i)=><span class="story-progress-segment"><i></i></span>)}
+          {Array.from({length:14},(_,i)=><span class="story-progress-segment"><i></i></span>)}
         </div>
         <div class="story-slides">
           <img class="story-slide is-active zoom-in" src="/images/WhatsApp%20Image%202026-11-27%20at%2015.09.50%20(1).jpeg" alt="Ótica Drika — conteúdo enviado pela loja" fetchpriority="high" />
@@ -65,7 +65,10 @@ const quick = [
           <img class="story-slide zoom-out" src="/images/WhatsApp%20Image%202026-11-27%20at%2015.10.05%20(2).jpeg" alt="Ótica Drika — conteúdo enviado pela loja" loading="lazy" />
           <img class="story-slide zoom-in" src="/images/WhatsApp%20Image%202026-11-27%20at%2015.10.05%20(3).jpeg" alt="Ótica Drika — conteúdo enviado pela loja" loading="lazy" />
           <img class="story-slide zoom-out" src="/images/WhatsApp%20Image%202026-11-27%20at%2015.10.05.jpeg" alt="Ótica Drika — conteúdo enviado pela loja" loading="lazy" />
-          <video class="story-slide story-video zoom-in" data-src="/videos/WhatsApp%20Video%202026-11-27%20at%2015.10.04.mp4" muted playsinline preload="none" aria-label="Vídeo da Ótica Drika"></video>
+          <video class="story-slide story-video zoom-in" data-src="/videos/WhatsApp%20Video%202026-11-27%20at%2015.09.50.mp4" muted playsinline preload="none" aria-label="Vídeo 1 da Ótica Drika"></video>
+          <video class="story-slide story-video zoom-out" data-src="/videos/WhatsApp%20Video%202026-11-27%20at%2015.09.51.mp4" muted playsinline preload="none" aria-label="Vídeo 2 da Ótica Drika"></video>
+          <video class="story-slide story-video zoom-in" data-src="/videos/WhatsApp%20Video%202026-11-27%20at%2015.09.55.mp4" muted playsinline preload="none" aria-label="Vídeo 3 da Ótica Drika"></video>
+          <video class="story-slide story-video zoom-out" data-src="/videos/WhatsApp%20Video%202026-11-27%20at%2015.10.04.mp4" muted playsinline preload="none" aria-label="Vídeo 4 da Ótica Drika"></video>
         </div>
         <button class="story-toggle" type="button" aria-label="Pausar carrossel" title="Pausar">Ⅱ</button>
       </div>
@@ -96,68 +99,62 @@ const quick = [
 <script>
 const carousel = document.querySelector('[data-story-carousel]');
 if (carousel) {
-  const slides = [...carousel.querySelectorAll('.story-slide')];
-  const progress = [...carousel.querySelectorAll('.story-progress-segment i')];
-  const pauseButton = carousel.querySelector('.story-toggle');
-  const videoSlide = carousel.querySelector('.story-video');
-  const imageDuration = 4800;
-  let current = 0, paused = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let timer, start = 0, remaining = imageDuration, videoDuration = imageDuration;
-  const isVideo = (slide) => slide instanceof HTMLVideoElement;
-  const stopVideo = () => { if (videoSlide) { videoSlide.pause(); videoSlide.currentTime = 0; } };
-  const setSlide = (index) => {
-    stopVideo();
-    slides.forEach((slide,i) => {
-      slide.classList.toggle('is-active', i === index);
-      slide.classList.remove('zoom-in','zoom-out');
-      slide.classList.add(i % 2 === 0 ? 'zoom-in' : 'zoom-out');
-    });
-    progress.forEach((bar,i) => { bar.style.transition='none'; bar.style.width=i<index?'100%':'0%'; });
-    current=index;
-    remaining=isVideo(slides[current])?videoDuration:imageDuration;
-    if(isVideo(slides[current]) && videoSlide && !videoSlide.src) videoSlide.src=videoSlide.dataset.src;
-    if(isVideo(slides[current]) && videoSlide) videoSlide.load();
-    if(!paused) runProgress();
-  };
-  const runProgress = () => {
-    clearTimeout(timer);
-    const bar=progress[current];
-    const dur=remaining;
-    bar.style.transition='none';
-    requestAnimationFrame(()=>{bar.style.transition='width '+dur+'ms linear';bar.style.width='100%';});
-    start=Date.now();
-    if(isVideo(slides[current])) {
-      const v=slides[current];
-      v.play().catch(()=>{});
-      timer=window.setTimeout(()=>next(),dur);
-    } else {
-      timer=window.setTimeout(()=>next(),dur);
+  const slides=[...carousel.querySelectorAll('.story-slide')];
+  const bars=[...carousel.querySelectorAll('.story-progress-segment i')];
+  const pauseButton=carousel.querySelector('.story-toggle');
+  const imageDuration=4800;
+  let current=0,paused=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let timer,start=0,remaining=imageDuration;
+  const isVideo=(s)=>s instanceof HTMLVideoElement;
+  const stopVideos=()=>slides.filter(isVideo).forEach(v=>{v.pause();v.currentTime=0;});
+  const setSlide=(index)=>{
+    clearTimeout(timer);stopVideos();
+    slides.forEach((s,i)=>{s.classList.toggle('is-active',i===index);s.classList.remove('zoom-in','zoom-out');s.classList.add(i%2===0?'zoom-in':'zoom-out');});
+    bars.forEach((b,i)=>{b.style.transition='none';b.style.width=i<index?'100%':'0%';});
+    current=index;remaining=imageDuration;
+    const active=slides[current];
+    if(isVideo(active)){
+      if(!active.src){active.src=active.dataset.src;active.load();}
+      if(active.duration&&Number.isFinite(active.duration))remaining=active.duration*1000;
     }
+    if(!paused)startProgress();
   };
-  const next=()=>{setSlide((current+1)%slides.length);};
-  const previous=()=>{setSlide((current-1+slides.length)%slides.length);};
+  const startProgress=()=>{
+    clearTimeout(timer);
+    const active=slides[current],bar=bars[current],duration=remaining;
+    bar.style.transition='none';
+    requestAnimationFrame(()=>{bar.style.transition='width '+duration+'ms linear';bar.style.width='100%';});
+    start=Date.now();
+    if(isVideo(active)){
+      active.play().catch(()=>{});
+      timer=setTimeout(next,duration);
+    }else timer=setTimeout(next,duration);
+  };
+  function next(){setSlide((current+1)%slides.length);}
+  function prev(){setSlide((current-1+slides.length)%slides.length);}
+  slides.filter(isVideo).forEach(v=>{
+    v.addEventListener('loadedmetadata',()=>{
+      if(slides[current]===v&&!paused&&Number.isFinite(v.duration)){remaining=v.duration*1000;startProgress();}
+    });
+    v.addEventListener('ended',()=>{if(!paused)next();});
+  });
   const pause=()=>{
-    if(paused)return;
-    paused=true;clearTimeout(timer);
+    if(paused)return;paused=true;clearTimeout(timer);
     remaining=Math.max(0,remaining-(Date.now()-start));
-    progress[current].style.transition='none';
-    progress[current].style.width=Math.min(100,(1-remaining/(isVideo(slides[current])?videoDuration:imageDuration))*100)+'%';
-    if(isVideo(slides[current])) slides[current].pause();
+    bars[current].style.transition='none';
+    bars[current].style.width=(1-remaining/(isVideo(slides[current])&&slides[current].duration?slides[current].duration*1000:imageDuration))*100+'%';
+    if(isVideo(slides[current]))slides[current].pause();
     pauseButton.textContent='▶';pauseButton.setAttribute('aria-label','Continuar carrossel');pauseButton.title='Continuar';
   };
   const play=()=>{
-    if(!paused)return;
-    paused=false;pauseButton.textContent='Ⅱ';pauseButton.setAttribute('aria-label','Pausar carrossel');pauseButton.title='Pausar';
-    if(isVideo(slides[current]) && slides[current].duration && Number.isFinite(slides[current].duration)) remaining=Math.max(250,(slides[current].duration-slides[current].currentTime)*1000);
-    runProgress();
+    if(!paused)return;paused=false;
+    pauseButton.textContent='Ⅱ';pauseButton.setAttribute('aria-label','Pausar carrossel');pauseButton.title='Pausar';
+    if(isVideo(slides[current])&&Number.isFinite(slides[current].duration))remaining=Math.max(250,(slides[current].duration-slides[current].currentTime)*1000);
+    startProgress();
   };
-  if(videoSlide){
-    videoSlide.addEventListener('loadedmetadata',()=>{if(Number.isFinite(videoSlide.duration)){videoDuration=videoSlide.duration*1000;if(current===slides.indexOf(videoSlide)&&!paused){remaining=videoDuration;runProgress();}}});
-    videoSlide.addEventListener('ended',()=>{if(!paused)next();});
-  }
-  pauseButton.addEventListener('click',(e)=>{e.stopPropagation();paused?play():pause();});
-  carousel.addEventListener('click',(e)=>{if(e.target===pauseButton)return;clearTimeout(timer);remaining=isVideo(slides[current])?videoDuration:imageDuration;const b=carousel.getBoundingClientRect();setSlide(e.clientX-b.left<b.width/2?(current-1+slides.length)%slides.length:(current+1)%slides.length);});
+  pauseButton.addEventListener('click',e=>{e.stopPropagation();paused?play():pause();});
+  carousel.addEventListener('click',e=>{if(e.target===pauseButton)return;const b=carousel.getBoundingClientRect();e.clientX-b.left<b.width/2?prev():next();});
   carousel.addEventListener('mouseenter',pause);carousel.addEventListener('mouseleave',play);
-  if(!paused)runProgress();else pauseButton.textContent='▶';
+  if(!paused)startProgress();else pauseButton.textContent='▶';
 }
 </script>
